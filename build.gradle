@@ -8,6 +8,13 @@ plugins {
 group = 'com.algaworks.algasensors'
 version = '0.0.1-SNAPSHOT'
 
+idea {
+	module {
+		downloadJavadoc = true
+		downloadSources = true
+	}
+}
+
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(25)
@@ -31,6 +38,8 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-data-jpa-test'
     testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	// Source: https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
+	implementation 'org.apache.commons:commons-lang3:3.18.0'
 }
 
 tasks.named('test') {
