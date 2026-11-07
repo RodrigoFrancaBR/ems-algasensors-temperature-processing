@@ -1,5 +1,6 @@
 package com.algaworks.algasensors.temperature.processing.infrastructure.rabbitmq;
 
+import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.ExchangeBuilder;
 import org.springframework.amqp.core.FanoutExchange;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
@@ -14,6 +15,7 @@ import tools.jackson.databind.json.JsonMapper;
 public class RabbitMQConfig {
 
     public static final String FANOUT_EXCHANGE_NAME = "temperature-processing.temperature-received.v1.e";
+    public static final String DIRECT_EXCHANGE_NAME = "temperature-processing.notification.v1.e";
 
     @Bean
     public JacksonJsonMessageConverter jacksonJsonMessageConverter(
@@ -28,8 +30,13 @@ public class RabbitMQConfig {
     }
 
     @Bean
-    public FanoutExchange exchange() {
+    public FanoutExchange fanoutExchange() {
         return ExchangeBuilder.fanoutExchange(FANOUT_EXCHANGE_NAME).build();
     }
 
+    // --- Novo Fluxo de Notificação (Direct) ---
+    @Bean
+    public DirectExchange notificationExchange() {
+        return ExchangeBuilder.directExchange(DIRECT_EXCHANGE_NAME).build();
+    }
 }

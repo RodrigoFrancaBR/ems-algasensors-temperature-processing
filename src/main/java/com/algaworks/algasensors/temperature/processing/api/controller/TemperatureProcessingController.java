@@ -13,6 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.OffsetDateTime;
 
+import static com.algaworks.algasensors.temperature.processing.infrastructure.rabbitmq.RabbitMQConfig.DIRECT_EXCHANGE_NAME;
 import static com.algaworks.algasensors.temperature.processing.infrastructure.rabbitmq.RabbitMQConfig.FANOUT_EXCHANGE_NAME;
 
 @RestController
@@ -51,6 +52,15 @@ public class TemperatureProcessingController {
         Object payload = logOutput;
 
         rabbitTemplate.convertAndSend(exchange, routingKey, payload);
+
+        // Exemplo de regra de negócio: Se a temperatura atingir um limite crítico (ex: > 40°C), dispara SMS se for abaixo E-mail
+        if (temperature > 40.0) {
+            // Dispara para a fila de SMS
+            rabbitTemplate.convertAndSend(DIRECT_EXCHANGE_NAME, "notification.sms", logOutput);
+        }else {
+            // Dispara para a fila de E-mail
+            rabbitTemplate.convertAndSend(DIRECT_EXCHANGE_NAME, "notification.email", logOutput);
+        }
 
     }
 
