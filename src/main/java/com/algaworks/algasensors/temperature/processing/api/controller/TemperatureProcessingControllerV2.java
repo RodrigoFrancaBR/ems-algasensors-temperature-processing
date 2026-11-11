@@ -109,7 +109,8 @@ public class TemperatureProcessingControllerV2 {
 
     private void sendToMaintenance(TemperatureLogOutput logOutput) {
         // --- 2. DIRECT: Envia para Manutenção se o valor for crítico ---
-        String directRoutingKey = logOutput.getValue() > 80.0 ? "alerta.critico" : "alerta.normal";
+        //String directRoutingKey = logOutput.getValue() > 80.0 ? "alerta.critico" : "alerta.normal";
+        String directRoutingKey = "alerta.critico";
         log.info("[2/3 DIRECT] Direcionando para manutenção com chave: '{}'", directRoutingKey);
         rabbitTemplate.convertAndSend(RabbitMQConfigV2.DIRECT_EXCHANGE, directRoutingKey, logOutput);
     }
